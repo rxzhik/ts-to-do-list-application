@@ -1,0 +1,82 @@
+.form-section{
+    background-color: #d8c3a5;
+}
+
+.task-list-section{
+    background-color: #eae7dc;
+    min-height: 100vh;
+}
+
+.both-task-list{
+    display: flex;
+    flex-direction: row;
+    column-gap: 5vw;
+    justify-content: space-around;
+    padding-top: 4vh;
+    padding-bottom: 5vh;
+    align-items: baseline;
+}
+
+.active-task-list{
+    display: flex;
+    flex-flow: column wrap;
+    gap: 1vh;
+    align-items: stretch;
+    background-color: #c79a4c;
+    padding: 2vw;
+    border-radius: 2%;
+}
+
+.completed-task-list{
+    display: flex;
+    flex-flow: column wrap;
+    gap: 1vh;
+    background-color: #c44b5b;
+    padding: 2vw;
+    border-radius: 2%;
+}
+
+.task-card{
+    width: 30vw;
+}
+
+.footer{
+    background-color: black;
+    height: 20vh;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.logo-name-footer{
+    display: flex;
+    justify-content: center;
+}
+
+.footer-links{
+    display: flex;
+    justify-content: center;
+    gap: 1vw;
+}
+
+.footer-links a{
+    color: inherit;
+    text-decoration: none;
+}
+
+.bg-modal{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 0;
+}
+
+.modal-content{
+    width: 30vw;
+    height: 40vh;
+    background-color: green;
+}
