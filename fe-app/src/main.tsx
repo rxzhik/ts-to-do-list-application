@@ -10,7 +10,7 @@ import { initTasks } from './data/taskRepo.tsx';
 initTasks();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )

@@ -1,0 +1,40 @@
+@media (max-width: 700px){
+    .add-task-form-container{
+        display: flex;
+        flex-direction: column;
+        gap: 2vh;
+        align-items: center;
+    }
+
+    .add-task-form-button, .title-input, .content-input{
+        min-width: 80%;
+    }
+
+}
+.add-task-form{
+    width: 100% !important;
+}
+.add-task-form-container{
+    display: flex;
+    gap: 2vw;
+    justify-content: center;
+}
+
+.title-input{
+    flex: 1 1 0px;
+    max-width: 25%;
+}
+
+.content-input{
+    flex: 1 1 0px;
+    max-width: 30%;
+}
+
+.add-task-form-button{
+    flex: 1 1 0px;
+    max-width: 20%;
+}
+
+.title-input, .content-input, .add-task-form-button{
+    min-height: 7vh;
+}

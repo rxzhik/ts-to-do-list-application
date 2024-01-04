@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import SearchBar from '../components/AddTaskBar'
 import { Task } from '../data/database-brief';
-import { deleteTask, getActiveTasks, getCompletedTasks, moveTaskToDone } from '../data/taskRepo';
-import { Button, ButtonGroup, Card, Container } from 'react-bootstrap';
+import { getActiveTasks, getCompletedTasks, moveTaskToDone } from '../data/taskRepo';
+import { Container } from 'react-bootstrap';
 import "./Home.css"
-import logo from "../assets/logo.png"
-
+import Card from '../components/Card';
+import {DragDropContext, DropResult, Droppable} from 'react-beautiful-dnd';
 const Home = () => {
 
   const [activeTask, setActiveTask] = useState<Task[] | null>(null);
   const [completedTask, setCompletedTask] = useState<Task[] | null>(null);
-  const [updateTasks, setUpdatTasks] = useState(true);
+  const [updateTasks, setUpdateTasks] = useState(true);
 
   useEffect(() => {
     const getTasks: () => void = async () => {
@@ -28,90 +28,99 @@ const Home = () => {
     getTasks()
   }, [updateTasks])
 
-  const handleDeleteTask: (id: number | undefined)=> void = async (id) => {
-    if(id){
-      await deleteTask(id)
-      setUpdatTasks((curr)=>!curr)
+
+  const onDragEnd = (result: DropResult)=> {
+    const {source, destination} = result;
+
+    if(!destination) return;
+
+    if(destination.droppableId === source.droppableId && source.index === destination.index ) return;
+    
+    if(source.droppableId === "ActiveList") {
+      if(destination.droppableId === "CompletedList"){
+        if(activeTask){
+          handleTaskDropOnCT(activeTask[source.index].id)
+        }
+      }
+
+      if(destination.droppableId === "ActiveList"){
+        //This only happends in the frontend the database isn't changed here:
+        shiftActiveTasks(source.index, destination.index)
+      }
     }
   }
 
-  const handleDoneTask: (id: number | undefined)=> void = async (id) => {
+  //When a task is picked from Active Task and dropped in Completed Task(CT)
+  const handleTaskDropOnCT: (id: number)=> void = async (id) => {
     if(id){
       await moveTaskToDone(id)
-      setUpdatTasks((curr)=>!curr)
+      setUpdateTasks((curr)=>!curr)
     }
   }
 
-  //TODO: edit task
+  const shiftActiveTasks = (initialIndex: number, finalIndex: number) => {
+    let active = activeTask
+    if(active){
+      let taskToMove = active.splice(initialIndex, 1)
+      active.splice(finalIndex, 0, taskToMove[0])
+      setActiveTask(active)
+    }
+  }
 
   return (
     <>
-      {/* modal */}
-      <div className="bg-modal">
-        <div className="modal-content">
-          Hello
-        </div>
-      </div>
-
       <div className="form-section">
         <Container
           className="d-flex justify-content-center align-items-center px-0"
           style={{ height: '25vh' }}
         >
-          <SearchBar updateTask = {setActiveTask} />
+          <SearchBar updateTask = {setUpdateTasks} />
         </Container>
       </div>
       <div className="task-list-section">
         <Container>
-        <div className='both-task-list'>
-          <div className="active-task-list">
-            <h1 style={{fontWeight: "bold", color: "#fffff4"}}>Active Tasks</h1>
-            {activeTask !== null ? (
-              activeTask.map((task: Task) => (
-                <Card key={task.id} className="task-card">
-                  <Card.Body>
-                    <Card.Title style={{fontSize: "2vw"}}>{task.title}</Card.Title>
-                    <Card.Text style={{fontSize: "20px"}}>{task.content}</Card.Text>
-                    <ButtonGroup size="sm" className="mb-2">
-                      <Button variant="dark">
-                        <span className="material-symbols-outlined">edit</span>
-                      </Button>
-                      <Button variant="dark" onClick={() => handleDeleteTask(task.id)}>
-                        <span className="material-symbols-outlined">delete</span>
-                      </Button>
-                      <Button variant="dark">
-                        <span className="material-symbols-outlined" onClick={() => handleDoneTask(task.id)}>done</span>
-                      </Button>
-                    </ButtonGroup>
-                  </Card.Body>
-                </Card>
-              ))
-            ) : (
-              <div>Loading Tasks</div>
-            )}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className='both-task-list'>
+            <Droppable droppableId='ActiveList'>
+              {
+                (provided)=>{
+                  return(
+                    <div className="active-task-list" ref={provided.innerRef} {...provided.droppableProps}>
+                      <h1 style={{fontWeight: "bold", color: "#fffff4"}}>Active Tasks</h1>
+                      {activeTask !== null ? (
+                        activeTask.map((task: Task, index: number) => (
+                          <Card task={task} index={index} setUpdateTasks={setUpdateTasks}/>
+                        ))
+                      ) : (
+                        <div>Loading Active Tasks</div>
+                      )}
+                      {provided.placeholder}
+                    </div>
+                  )
+                }
+              }
+            </Droppable>
+            <Droppable droppableId='CompletedList'>
+              {
+                (provided)=>{
+                  return(
+                    <div className="completed-task-list" ref={provided.innerRef} {...provided.droppableProps}>
+                      <h1 style={{fontWeight: "bold", color: "#f9f1f1"}}>Completed Tasks</h1>
+                      {completedTask !== null ? (
+                        completedTask.map((task: Task, index: number) => (
+                          <Card task={task} index={index} setUpdateTasks={setUpdateTasks}/>
+                        ))
+                      ) : (
+                        <div>Loading Completed Tasks</div>
+                      )}
+                      {provided.placeholder}
+                    </div>
+                  )
+                }
+              }
+            </Droppable>
           </div>
-
-          <div className="completed-task-list">
-            <h1 style={{fontWeight: "bold", color: "#f9f1f1"}}>Completed Tasks</h1>
-            {completedTask !== null ? (
-              completedTask.map((task: Task) => (
-                <Card key={task.id} className="task-card">
-                  <Card.Body>
-                    <Card.Title style={{fontSize: "2vw"}}>{task.title}</Card.Title>
-                    <Card.Text style={{fontSize: "20px"}}>{task.content}</Card.Text>
-                    <ButtonGroup size="sm" className="mb-2">
-                      <Button variant="danger" onClick={() => handleDeleteTask(task.id)}>
-                        <span className="material-symbols-outlined">delete</span>
-                      </Button>
-                    </ButtonGroup>
-                  </Card.Body>
-                </Card>
-              ))
-            ) : (
-              <div>Loading Tasks</div>
-            )}
-          </div>
-        </div>
+        </DragDropContext>
         </Container>
       </div >
     </>

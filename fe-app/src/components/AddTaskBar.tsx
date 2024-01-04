@@ -3,9 +3,10 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 import { addTask } from '../data/taskRepo';
 import { Task } from '../data/database-brief';
 import { format } from 'date-fns';
+import "./AddTaskBar.css"
 
 interface AddTaskBarProps{
-  updateTask: React.Dispatch<React.SetStateAction<Task[] | null>>
+  updateTask: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const AddTaskBar: React.FC<AddTaskBarProps> = (props) => {
@@ -15,8 +16,10 @@ const AddTaskBar: React.FC<AddTaskBarProps> = (props) => {
 
   const {updateTask} = props;
 
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    //TODO: Figure out whats wrong with event.preventDefault()
+    //Suggestion: Use a custom Form don't use bootstrap
+    //use tailwindcss instead.
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -28,53 +31,50 @@ const AddTaskBar: React.FC<AddTaskBarProps> = (props) => {
     if(form.checkValidity()){
       //Add Task here ot the Active Task List here
       const new_task: Task = {
+        id: Number(format(new Date(), 'yyyyMMddmmss')),
         title: title,
         content: content,
         status: true
       }
+      
       updateTasks(new_task);
     }
   };
 
   const updateTasks: (new_task: Task)=> void = async (new_task)=>{
-    new_task.id = Number(format(new Date(), 'yyyyMMddmmss'))
-    const new_tasks: Task[] = await addTask(new_task);
-    updateTask(new_tasks);
+    await addTask(new_task);
+    updateTask((curr)=>!curr)
   }
 
   return (
-    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-      <Row>
-        <Col>
-          <Form.Control
-              required
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={(e)=> setTitle(e.target.value)}
-              size='lg'
-              style={{ width: '30vw' }} 
-            />
-            <Form.Control.Feedback type="invalid" >Task title is required</Form.Control.Feedback>
-        </Col>
-        <Col>
-          <Form.Control
-              required
-              type="text"
-              placeholder="Content"
-              value={content}
-              onChange={(e)=> setContent(e.target.value)}
-              size='lg'
-              style={{ width: '25vw' }} 
-            />
-              <Form.Control.Feedback type="invalid" >Task Content is required.</Form.Control.Feedback>
-        </Col>
-        <Col>
-          <Button type="submit" size='lg' variant="dark" style={{width: "10vw"}}>
-            Create Task
-          </Button>
-        </Col>
-      </Row>
+    <Form noValidate validated={validated} onSubmit={handleSubmit} className="add-task-form">
+      <div className='add-task-form-container
+      '>
+        <Form.Control
+            required
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e)=> setTitle(e.target.value)}
+            size='lg'
+            className="title-input"
+          />
+        <Form.Control.Feedback type="invalid" >Task title is required</Form.Control.Feedback>
+
+        <Form.Control
+            required
+            type="text"
+            placeholder="Content"
+            value={content}
+            onChange={(e)=> setContent(e.target.value)}
+            size='lg'
+            className="content-input"
+          />
+          <Form.Control.Feedback type="invalid" >Task Content is required.</Form.Control.Feedback>
+        <Button type="submit" size='lg' variant="dark"  className="add-task-form-button">
+          Create Task
+        </Button>
+      </div>
     </Form>
   )
 }

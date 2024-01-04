@@ -1,11 +1,12 @@
 export type Task = {
-    id?: number,
+    id: number,
     title: string,
     content: string,
     status: boolean
 }
 
 export type User = {
+    id: string,
     username: string,
     email: string,
     password: string
@@ -51,12 +52,14 @@ export const tasks: Task[] = [
 ]
 
 export const users: User[] = [
-    {
+    {   
+        id: "U1",
         username: "Rashik",
         email: "pommyraj@gmail.com",
         password: "1Rashik@#"
     },
-    {
+    {   
+        id: "U2",
         username: "Kawish",
         email: "rajkawish@gmail.com",
         password: "1Kawish@#"

@@ -121,4 +121,3 @@ export const moveTaskToDone: (id: number)=> Promise<void | Error> = async (id) =
     return new Error('The database is empty')
 }   
 
-
