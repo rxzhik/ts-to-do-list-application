@@ -6,11 +6,18 @@ import { Container } from 'react-bootstrap';
 import "./Home.css"
 import Card from '../components/Card';
 import {DragDropContext, DropResult, Droppable} from 'react-beautiful-dnd';
-const Home = () => {
+
+type HomeProps = {
+  isLoggedIn: boolean
+}
+
+const Home = (props: HomeProps) => {
 
   const [activeTask, setActiveTask] = useState<Task[] | null>(null);
   const [completedTask, setCompletedTask] = useState<Task[] | null>(null);
   const [updateTasks, setUpdateTasks] = useState(true);
+  const {isLoggedIn} = props;
+
 
   useEffect(() => {
     const getTasks: () => void = async () => {

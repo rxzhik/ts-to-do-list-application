@@ -1,0 +1,46 @@
+.Register-Modal-Form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.Register-Modal-Image{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Register-Modal-Image img{
+    width: 15%;
+    min-width: 70px;
+    height: 15%;
+    min-height: 70px;
+    padding-top: 5%;
+}
+
+.Register-Modal-Data{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.Register-Modal-DataEntry{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+}
+
+.error{
+    font-size: 20px;
+    color: #c44b5b;
+    font-weight: normal;
+}
+
+.Register-Modal-Buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

@@ -1,0 +1,30 @@
+.LogIn-Modal,.Register-Modal{
+    width: 30%;
+    height: max-content;
+    padding: 20px;
+    border-width: 0;
+    border-radius: 2%; 
+    background-color: #eae7dc;
+    box-shadow: 2px 2px 2px 2px #9c9a95;
+}
+
+@media all and (max-width: 1200px)  {
+    .LogIn-Modal,.Register-Modal{
+        width: 40%;
+        
+    }
+}
+
+@media all and (max-width: 800px)  {
+    .LogIn-Modal,.Register-Modal{
+        width: 50%;
+        
+    }
+}
+
+@media all and (max-width: 800px)  {
+    .LogIn-Modal,.Register-Modal{
+        width: 80%;
+    }
+}
+

@@ -4,10 +4,12 @@ import App from './App.tsx'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { initTasks } from './data/taskRepo.tsx';
+import { initUsers } from './data/userRepo.tsx';
 
 
 //initializing the localStorage
 initTasks();
+initUsers();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
