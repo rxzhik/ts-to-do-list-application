@@ -34,7 +34,7 @@ const LogInModal = (props: LogInModalProps) => {
         setErrors((prev) => ({ ...prev, [name]: ''})); // Clear error when the field is changed
     };
 
-    const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event)=>{
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event)=>{
         event.preventDefault();
         const newErrors: { [key in keyof FormState]?: string } = {};
 
@@ -53,7 +53,7 @@ const LogInModal = (props: LogInModalProps) => {
         }
 
         //If form is valid then proceed with submission logic
-        const user_id = findUser(formState.username, formState.password)
+        const user_id = await findUser(formState.username, formState.password)
         //if user not found
         if(user_id instanceof Error){
             Object.keys(formState).forEach((key)=>{
@@ -70,7 +70,6 @@ const LogInModal = (props: LogInModalProps) => {
             toggleLoginModal();
             setIsLoggedIn(true);
         }
-
     }
 
     return (

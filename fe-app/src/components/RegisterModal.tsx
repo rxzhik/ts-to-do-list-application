@@ -39,7 +39,7 @@ const RegisterModal = (props: RegisterModalProps) => {
         setErrors((prev) => ({ ...prev, [name]: ''})); // Clear error when the field is changed
     };
 
-    const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event)=>{
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event)=>{
         event.preventDefault(); 
         const newErrors: { [key in keyof FormState]?: string } = {};
 
@@ -60,7 +60,8 @@ const RegisterModal = (props: RegisterModalProps) => {
         }
 
         //Validation for Password Specifications
-        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+
         if(formState.password){
             if(!passwordPattern.test(formState.password)){
                 newErrors.password = `At least 1 alphabet, 1 digit & min 8 characters`
@@ -75,7 +76,7 @@ const RegisterModal = (props: RegisterModalProps) => {
 
         //If form is valid then proceed with submission logic
         //Add User to User List
-        const currUserId = addUser({...formState})
+        const currUserId = await addUser({...formState})
         //setCurrentUser
         if(!(currUserId instanceof Error)){
             setCurrentUserId(currUserId);

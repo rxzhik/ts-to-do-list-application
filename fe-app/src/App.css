@@ -11,14 +11,12 @@
 @media all and (max-width: 1200px)  {
     .LogIn-Modal,.Register-Modal{
         width: 40%;
-        
     }
 }
 
 @media all and (max-width: 800px)  {
     .LogIn-Modal,.Register-Modal{
         width: 50%;
-        
     }
 }
 
